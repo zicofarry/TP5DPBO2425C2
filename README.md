@@ -30,7 +30,6 @@ Program mencakup __3__ class, yaitu __Product__, __ProductMenu__, dan __Database
   - Kategori
   - Kualitas
 - ProductMenu:
-  - listProduct
   - database
 - Database:
   - connection
