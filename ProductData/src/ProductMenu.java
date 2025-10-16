@@ -7,7 +7,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class ProductMenu extends JFrame {
     public static void main(String[] args) {
@@ -36,7 +35,6 @@ public class ProductMenu extends JFrame {
     // index baris yang diklik
     private int selectedIndex = -1;
     // list untuk menampung semua produk
-    private ArrayList<Product> listProduct;
     private Database database;
 
     private JPanel mainPanel;
@@ -62,13 +60,9 @@ public class ProductMenu extends JFrame {
     // constructor
     public ProductMenu() {
         // inisialisasi listProduct
-        listProduct = new ArrayList<>();
 
         // buat objek database
         database = new Database();
-
-        // isi listProduct
-        populateList();
 
         // isi tabel produk
         productTable.setModel(setTable());
@@ -198,12 +192,29 @@ public class ProductMenu extends JFrame {
     public void insertData() {
         try {
             // ambil value dari textfield dan combobox
-            String id = idField.getText();
-            String nama = namaField.getText();
-            double harga = Double.parseDouble(hargaField.getText());
-            int stok = Integer.parseInt(stokField.getText());
+            String id = idField.getText().trim();
+            String nama = namaField.getText().trim();
+            String hargaStr = hargaField.getText().trim();
+            String stokStr = stokField.getText().trim();
             String kategori = kategoriComboBox.getSelectedItem().toString();
             int kualitas = kualitasSlider.getValue();
+
+            // validasi input kosong
+            if (id.isEmpty() || nama.isEmpty() || hargaStr.isEmpty() || stokStr.isEmpty() || kategori.equals("???")) {
+                JOptionPane.showMessageDialog(null, "Semua kolom wajib diisi!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // konversi angka
+            double harga = Double.parseDouble(hargaStr);
+            int stok = Integer.parseInt(stokStr);
+
+            // cek ID yang sudah ada
+            ResultSet rs = database.selectQuery("SELECT id FROM product WHERE id='" + id + "'");
+            if (rs.next()) {
+                JOptionPane.showMessageDialog(null, "ID produk sudah ada! Gunakan ID lain.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             // tambahkan data ke dalam database
             String sqlQuery = "INSERT INTO product VALUES ('" + id + "', '" + nama + "', " + harga + ", " + stok + ", '" + kategori + "', '" + kualitas + "')";
@@ -218,9 +229,10 @@ public class ProductMenu extends JFrame {
             // feedback
             System.out.println("Insert berhasil");
             JOptionPane.showMessageDialog(null, "Data berhasil ditambahkan");
-        }catch (NumberFormatException ex){
-            JOptionPane.showMessageDialog(null, "Harga harus berupa angka!", "Error", JOptionPane.ERROR_MESSAGE);
-
+        }catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Harga dan stok harus berupa angka!", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Terjadi kesalahan database!", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -228,12 +240,22 @@ public class ProductMenu extends JFrame {
     public void updateData() {
         try{
             // ambil data dari form
-            String id = idField.getText();
-            String nama = namaField.getText();
-            double harga = Double.parseDouble(hargaField.getText());
-            int stok = Integer.parseInt(stokField.getText());
+            String id = idField.getText().trim();
+            String nama = namaField.getText().trim();
+            String hargaStr = hargaField.getText().trim();
+            String stokStr = stokField.getText().trim();
             String kategori = kategoriComboBox.getSelectedItem().toString();
             int kualitas = kualitasSlider.getValue();
+
+            // validasi input kosong
+            if (id.isEmpty() || nama.isEmpty() || hargaStr.isEmpty() || stokStr.isEmpty() || kategori.equals("???")) {
+                JOptionPane.showMessageDialog(null, "Semua kolom wajib diisi!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // konversi angka
+            double harga = Double.parseDouble(hargaStr);
+            int stok = Integer.parseInt(stokStr);
 
             // ubah data produk pada database
             String sqlQuery = "UPDATE product SET " +
@@ -254,8 +276,8 @@ public class ProductMenu extends JFrame {
             // feedback
             System.out.println("Update berhasil");
             JOptionPane.showMessageDialog(null, "Data berhasil diubah");
-        }catch (NumberFormatException ex){
-            JOptionPane.showMessageDialog(null, "Harga harus berupa angka!", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Harga dan stok harus berupa angka!", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
 
@@ -297,22 +319,4 @@ public class ProductMenu extends JFrame {
         selectedIndex = -1;
     }
 
-    // panggil prosedur ini untuk mengisi list produk
-    private void populateList() {
-        listProduct.add(new Product("P001", "Laptop Asus", 8500000.0, 15, "Elektronik", 4));
-        listProduct.add(new Product("P002", "Mouse Logitech", 350000.0, 23, "Elektronik", 5));
-        listProduct.add(new Product("P003", "Keyboard Mechanical", 750000.0, 41, "Elektronik", 4));
-        listProduct.add(new Product("P004", "Roti Tawar", 15000.0, 16, "Makanan", 3));
-        listProduct.add(new Product("P005", "Susu UHT", 12000.0, 12, "Minuman", 2));
-        listProduct.add(new Product("P006", "Kemeja Putih", 125000.0, 25, "Pakaian", 1));
-        listProduct.add(new Product("P007", "Celana Jeans", 200000.0, 33, "Pakaian", 4));
-        listProduct.add(new Product("P008", "Pensil 2B", 3000.0, 54, "Alat Tulis", 3));
-        listProduct.add(new Product("P009", "Buku Tulis", 8000.0, 14, "Alat Tulis", 4));
-        listProduct.add(new Product("P010", "Air Mineral", 5000.0, 22, "Minuman", 5));
-        listProduct.add(new Product("P011", "Smartphone Samsung", 4500000.0, 29, "Elektronik", 5));
-        listProduct.add(new Product("P012", "Kue Brownies", 25000.0, 20, "Makanan", 4));
-        listProduct.add(new Product("P013", "Jaket Hoodie", 180000.0, 70, "Pakaian", 5));
-        listProduct.add(new Product("P014", "Pulpen Gel", 5000.0, 20, "Alat Tulis", 2));
-        listProduct.add(new Product("P015", "Teh Botol", 8000.0, 15, "Minuman", 4));
-    }
 }
