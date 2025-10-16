@@ -50,7 +50,4 @@ Note:
 Program ini mirip dengan [Tugas Praktikum 4](https://github.com/zicofarry/TP4DPBO2425C2), hanya saja menggunakan koneksi ke dalam database.
 
 # Dokumentasi
-<div>
-    <a>Klik untuk melihat vidio dokumentasi</a><br><br>
-    <a href="https://youtu.be/yxzMiZ1A3Ds"><img src="https://img.shields.io/badge/YouTube-%23FF0000.svg?style=for-the-badge&logo=YouTube&logoColor=white" /></a>
-</div>
+https://github.com/user-attachments/assets/2fe40efa-ee48-49fe-8e8d-e27f10ffca46
