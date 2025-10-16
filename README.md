@@ -47,8 +47,12 @@ Pengguna dapat mengisi form lalu menekan tombol __Add__ untuk menambahkan data p
 
 Jika pengguna mengubah nilai pada form dan menekan tombol __Update__, maka data produk yang dipilih akan diperbarui di tabel. Sementara itu, ketika tombol __Delete__ ditekan, akan muncul jendela konfirmasi penghapusan, dan data produk akan dihapus apabila pengguna memilih tombol __Yes__.
 
-Note:
-Program ini mirip dengan [Tugas Praktikum 4](https://github.com/zicofarry/TP4DPBO2425C2), hanya saja menggunakan koneksi ke dalam database.
+Selebihnya mirip dengan Tugas Praktikum sebelumnya [TP4](https://github.com/zicofarry/TP4DPBO2425C2), hanya saja menggunakan koneksi ke dalam database dan saya menambahkan beberapa notifikasi tambahan.
+
+Notifikasi tambahan :
+1. Error jika masih ada kolom input yang kosong saat insert
+2. Error jika masih ada kolom input yang kosong saat update
+3. Error jika melakukan insert pada ID yang sudah ada 
 
 # Dokumentasi
 https://github.com/user-attachments/assets/2fe40efa-ee48-49fe-8e8d-e27f10ffca46
